@@ -526,7 +526,7 @@ class AE64:
             raise Exception("register name '{}' is not valid".format(register))
         prologue = self._gen_prologue(register.lower())
         prologueLength = len(prologue)
-        print("[+] prologue generated")
+        #print("[+] prologue generated")
 
         # 2. get encoded shellcode
         encodedShellcode = self._gen_encoded_shellcode(shellcode)
@@ -534,12 +534,12 @@ class AE64:
             if not isalnum(ch):
                 raise Exception(
                     "find non-alphanumeric byte {} in encodedShellcode".format(hex(ch)))
-        print("[+] encoded shellcode generated")
+        #print("[+] encoded shellcode generated")
 
         # 3. build decoder
         totalSpace = prologueLength if prologueLength > 0x20 else 0x20
         while True:
-            print("[*] build decoder, try free space: {} ...".format(totalSpace))
+            #print("[*] build decoder, try free space: {} ...".format(totalSpace))
             decoder = self._gen_decoder(offset + totalSpace)
             decoderLength = len(decoder)
             trueLength = prologueLength + decoderLength
@@ -560,8 +560,8 @@ class AE64:
                 raise Exception(
                     "find non-alphanumeric byte {} in final shellcode".format(hex(ch)))
 
-        print("[+] Alphanumeric shellcode generate successfully!")
-        print("[+] Total length: {}".format(len(new_shellcode)))
+        #print("[+] Alphanumeric shellcode generate successfully!")
+        #print("[+] Total length: {}".format(len(new_shellcode)))
         return new_shellcode
 
     def encode_small(self, shellcode: bytes, register: str = 'rax', offset: int = 0) -> bytes:
@@ -577,7 +577,7 @@ class AE64:
             raise Exception("register name '{}' is not valid".format(register))
         prologue = self._gen_prologue_small(register.lower())
         prologueLength = len(prologue)
-        print("[+] prologue generated")
+        #print("[+] prologue generated")
 
         # 2. build encoded level2 decoder
         encodedLvl2DecoderTemplate = self._gen_encoded_small_lvl2_decoder(
@@ -590,7 +590,7 @@ class AE64:
         # 3. build level1 decoder
         totalSpace = prologueLength if prologueLength > 0x30 else 0x30
         while True:
-            print("[*] build decoder, try free space: {} ...".format(totalSpace))
+            #print("[*] build decoder, try free space: {} ...".format(totalSpace))
             decoder = self._gen_decoder(offset + totalSpace)
             decoderLength = len(decoder)
             trueLength = prologueLength + decoderLength
@@ -608,7 +608,7 @@ class AE64:
             encoder2Start, len(shellcode))
 
         # 5. build encoded shellcode
-        print("[*] generate encoded shellcode ...")
+        #print("[*] generate encoded shellcode ...")
         encodedShellcode = self._gen_small_encoded_shellcode(
             shellcode, encoder2Offset)
 
@@ -618,8 +618,8 @@ class AE64:
         new_shellcode += encodedLvl2Decoder
         new_shellcode += encodedShellcode
 
-        print("[+] Alphanumeric shellcode generate successfully!")
-        print("[+] Total length: {}".format(len(new_shellcode)))
+        #print("[+] Alphanumeric shellcode generate successfully!")
+        #print("[+] Total length: {}".format(len(new_shellcode)))
         return new_shellcode
 
     def encode(self, shellcode: bytes, register: str = 'rax', offset: int = 0, strategy: str = 'fast') -> bytes:
